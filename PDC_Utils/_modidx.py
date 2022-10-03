@@ -7,4 +7,6 @@ d = { 'settings': { 'branch': 'main',
                 'lib_path': 'PDC_Utils'},
   'syms': { 'PDC_Utils.core': {'PDC_Utils.core.foo': ('core.html#foo', 'PDC_Utils/core.py')},
             'PDC_Utils.pdc': { 'PDC_Utils.pdc.PDC': ('pdc.html#pdc', 'PDC_Utils/pdc.py'),
+                               'PDC_Utils.pdc.PDC.__init__': ('pdc.html#pdc.__init__', 'PDC_Utils/pdc.py'),
+                               'PDC_Utils.pdc.PDC.fit': ('pdc.html#pdc.fit', 'PDC_Utils/pdc.py'),
                                'PDC_Utils.pdc.power_curve': ('pdc.html#power_curve', 'PDC_Utils/pdc.py')}}}

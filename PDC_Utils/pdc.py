@@ -9,16 +9,23 @@ import numpy as np
 import pandas as pd
 
 # %% ../nbs/00_PDC.ipynb 6
-def power_curve(x, frc, ftp, tte, tau, tau2, a):
+def power_curve(x, 
+                frc,  # Functional Reserve Capacity 
+                ftp,  # Functional Threshold Power
+                tte,  # Time to Exhaustion
+                tau,  # Short end calibration
+                tau2, # Long end calibration
+                a): # Decay factor past TTE
     p = frc/x * (1.0 - np.exp(-x/tau)) + ftp * (1 - np.exp(-x / tau2))
     p -= np.maximum(0, a * np.log(x / tte))
     return p
 
 # %% ../nbs/00_PDC.ipynb 7
-def PDC():
-    def __init__(self, df_x, df_y): self.df_x, self.df_y = df_x, df_y
+class PDC:
+    "A Power Duraction Curve"
+    def __init__(self, x, y): self.x, self.y = x, y
     
-    def fit():
+    def fit(self):
         gmodel = Model(power_curve)
         params = Parameters()
         params.add('frc', value=5000, min=1, max=15000)
@@ -28,6 +35,6 @@ def PDC():
         params.add('tau2', value=5000, min=10, max=25)
         params.add('a', value=10, min=1, max=200)
         
-        return gmodel.fit(self.df_y, params, x=self.df_x)
+        return gmodel.fit(self.y, params, x=self.x)
         
     
