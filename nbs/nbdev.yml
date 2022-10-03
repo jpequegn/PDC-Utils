@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "PDC-Utils"
+  site-url: "https://jpequegn.github.io/PDC-Utils"
+  description: "Utilities to manage power duration curves"
+  repo-branch: main
+  repo-url: "https://github.com/jpequegn/PDC-Utils"
