@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PDC-Utils",
+    "section": "",
+    "text": "Fitting algorithm for running or cycling power data"
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "PDC-Utils",
+    "section": "Install",
+    "text": "Install\npip install PDC_Utils"
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "PDC-Utils",
+    "section": "How to use",
+    "text": "How to use\nUses a MMP curve based on best power efforts. An example of such input is in the data directory\n\ndf = pd.read_csv(\"../data/mmpcurve.csv\")\npdc = PDC(df['Secs'], df['Watts'])\n\n\nresult = pdc.fit()\nresult.best_values['ftp']\n\n247.97104270072407"
+  },
+  {
+    "objectID": "pdc.html",
+    "href": "pdc.html",
+    "title": "PDC",
+    "section": "",
+    "text": "source\n\npower_curve\n\n power_curve (x, frc, ftp, tte, tau, tau2, a)\n\n\n\n\n\nDetails\n\n\n\n\nx\n\n\n\nfrc\nFunctional Reserve Capacity\n\n\nftp\nFunctional Threshold Power\n\n\ntte\nTime to Exhaustion\n\n\ntau\nShort end calibration\n\n\ntau2\nLong end calibration\n\n\na\nDecay factor past TTE\n\n\n\n\nsource\n\n\nPDC\n\n PDC (x, y)\n\nA Power Duraction Curve\nLoad a mean maximal curve, with time in seconds and corresponding watts\n\ndf = pd.read_csv(\"../data/mmpcurve.csv\")\npdc = PDC(df['Secs'], df['Watts'])\n\n\nresult = pdc.fit()\n\n\nresult.best_values\n\n{'frc': 10190.691792353007,\n 'ftp': 247.97104270072407,\n 'tte': 1800.0000561443576,\n 'tau': 12.619522854826833,\n 'tau2': 25.0,\n 'a': 33.22731702525135}\n\n\n\nfitted_curve = power_curve(pdc.x, result.best_values['frc'],\n                          result.best_values['ftp'],\n                          result.best_values['tte'],\n                          result.best_values['tau'],\n                          result.best_values['tau2'],\n                          result.best_values['a'])\n\n\nplt.figure(figsize=(10,6))\nplt.plot(pdc.x, pdc.y, label='MMP')\nplt.plot(pdc.x, fitted_curve, label='PDC')\nplt.legend()\nplt.grid(True)\nplt.xscale('log')\nplt.show()"
+  },
+  {
+    "objectID": "mmp.html",
+    "href": "mmp.html",
+    "title": "MMP",
+    "section": "",
+    "text": "source\n\nMMP\n\n MMP (x, y)\n\nA Mean Max Power curve\n\n\n\n\nDetails\n\n\n\n\nx\nTime\n\n\ny\nPower\n\n\n\nLoad a mean maximal curve, with time in seconds and corresponding watts\n\ndf = pd.read_csv(\"../data/mmpcurve.csv\")\nmmp = MMP(df['Secs'], df['Watts'])\n\n\n@patch\ndef newBest(self:MMP, secs, watts):\n    newbest = (self.x<=secs) & (self.y<watts)\n    self.y.loc[newbest] = watts\n\n\nplt.figure(figsize=(10,6))\nplt.plot(mmp.x, mmp.y)\nplt.xscale('log')\nplt.show()\n\n\n\n\n\nmmp.newBest(100, 400)\n\n\nplt.figure(figsize=(10,6))\nplt.plot(mmp.x, mmp.y)\nplt.xscale('log')\nplt.show()"
+  }
+]
