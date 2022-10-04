@@ -11,8 +11,8 @@ import pandas as pd
 class MMP:
     "A Mean Max Power curve"
     def __init__(self
-                 , x:int # Time
-                 , y:int):   # Power
+                 , x     # Time
+                 , y):   # Power
         self.x, self.y = x, y
     
     def fit(self): pass

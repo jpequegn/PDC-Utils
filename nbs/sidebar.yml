@@ -2,4 +2,5 @@ website:
   sidebar:
     contents:
       - index.ipynb
-      - 00_PDC.ipynb
+      - 00_MMP.ipynb
+      - 01_PDC.ipynb
