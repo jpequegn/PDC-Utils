@@ -4,3 +4,4 @@ website:
       - index.ipynb
       - 00_MMP.ipynb
       - 01_PDC.ipynb
+      - 02_FIT.ipynb
