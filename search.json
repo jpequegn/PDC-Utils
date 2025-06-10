@@ -1,0 +1,92 @@
+[
+  {
+    "objectID": "pdc.html",
+    "href": "pdc.html",
+    "title": "PDC",
+    "section": "",
+    "text": "The power_curve function will be fitted to its parameters, with reasonable bounds\n\nsource\n\npower_curve\n\n power_curve (x, frc, ftp, tte, tau, tau2, a)\n\n\n\n\n\nDetails\n\n\n\n\nx\n\n\n\nfrc\nFunctional Reserve Capacity\n\n\nftp\nFunctional Threshold Power\n\n\ntte\nTime to Exhaustion\n\n\ntau\nShort end calibration\n\n\ntau2\nLong end calibration\n\n\na\nDecay factor past TTE\n\n\n\n\nsource\n\n\nPDC\n\n PDC (x, y)\n\nA Power Duraction Curve\nLoad a mean maximal curve, with time in seconds and corresponding watts\n\ndf = pd.read_csv(\"../data/mmpcurve.csv\")\npdc = PDC(df['Secs'], df['Watts'])\n\n\nresult = pdc.fit()\n\n\nresult.best_values\n\n{'frc': 10190.691792353007,\n 'ftp': 247.97104270072407,\n 'tte': 1800.0000561443576,\n 'tau': 12.619522854826833,\n 'tau2': 25.0,\n 'a': 33.22731702525135}\n\n\n\nfitted_curve = power_curve(pdc.x, result.best_values['frc'],\n                          result.best_values['ftp'],\n                          result.best_values['tte'],\n                          result.best_values['tau'],\n                          result.best_values['tau2'],\n                          result.best_values['a'])\n\n\nplt.figure(figsize=(10,6))\nplt.plot(pdc.x, pdc.y, label='MMP')\nplt.plot(pdc.x, fitted_curve, label='PDC')\nplt.legend()\nplt.grid(True)\nplt.xscale('log')\nplt.show()",
+    "crumbs": [
+      "PDC"
+    ]
+  },
+  {
+    "objectID": "mmp.html",
+    "href": "mmp.html",
+    "title": "MMP",
+    "section": "",
+    "text": "The power_curve function will be fitted to its parameters, with reasonable bounds\n\nsource\n\nMMP\n\n MMP (x, y)\n\nA Mean Max Power curve\n\n\n\n\nDetails\n\n\n\n\nx\nTime\n\n\ny\nPower\n\n\n\nLoad a mean maximal curve, with time in seconds and corresponding watts\n\ndf = pd.read_csv(\"../data/mmpcurve.csv\")\nmmp = MMP(df['Secs'], df['Watts'])\n\n\n@patch\ndef newBest(self:MMP, secs, watts):\n    newbest = (self.x&lt;=secs) & (self.y&lt;watts)\n    self.y.loc[newbest] = watts\n\n\nplt.figure(figsize=(10,6))\nplt.plot(mmp.x, mmp.y)\nplt.xscale('log')\nplt.show()\n\n\n\n\n\n\n\n\n\nmmp.newBest(100, 400)\n\n\nplt.figure(figsize=(10,6))\nplt.plot(mmp.x, mmp.y)\nplt.xscale('log')\nplt.show()",
+    "crumbs": [
+      "MMP"
+    ]
+  },
+  {
+    "objectID": "fit.html",
+    "href": "fit.html",
+    "title": "FIT File Support",
+    "section": "",
+    "text": "The FitLoader class provides functionality to load and extract power data from Garmin FIT files.\n\nsource\n\n\n\n FitLoader (filepath:str)\n\nLoad and extract data from Garmin FIT files",
+    "crumbs": [
+      "FIT File Support"
+    ]
+  },
+  {
+    "objectID": "fit.html#fit-file-loader",
+    "href": "fit.html#fit-file-loader",
+    "title": "FIT File Support",
+    "section": "",
+    "text": "The FitLoader class provides functionality to load and extract power data from Garmin FIT files.\n\nsource\n\n\n\n FitLoader (filepath:str)\n\nLoad and extract data from Garmin FIT files",
+    "crumbs": [
+      "FIT File Support"
+    ]
+  },
+  {
+    "objectID": "fit.html#integration-with-mmp-and-pdc-classes",
+    "href": "fit.html#integration-with-mmp-and-pdc-classes",
+    "title": "FIT File Support",
+    "section": "Integration with MMP and PDC Classes",
+    "text": "Integration with MMP and PDC Classes\nAdd convenience methods to create MMP and PDC objects from FIT files.\n\nsource\n\nload_fit_file\n\n load_fit_file (filepath:str)\n\n*Load a FIT file and return a FitLoader instance\nArgs: filepath: Path to the FIT file\nReturns: FitLoader instance*\n\nsource\n\n\nmmp_from_fit\n\n mmp_from_fit (filepath:str, durations:Optional[List[int]]=None)\n\n*Create an MMP object from a FIT file\nArgs: filepath: Path to the FIT file durations: List of durations in seconds to compute MMP for\nReturns: MMP object with data from the FIT file*\n\nsource\n\n\npdc_from_fit\n\n pdc_from_fit (filepath:str, durations:Optional[List[int]]=None)\n\n*Create a PDC object from a FIT file\nArgs: filepath: Path to the FIT file durations: List of durations in seconds to compute MMP for\nReturns: PDC object with data from the FIT file*",
+    "crumbs": [
+      "FIT File Support"
+    ]
+  },
+  {
+    "objectID": "fit.html#example-usage",
+    "href": "fit.html#example-usage",
+    "title": "FIT File Support",
+    "section": "Example Usage",
+    "text": "Example Usage\nHere’s how to use the FIT file functionality:\n\n# Load a FIT file\nfit_loader = load_fit_file('path/to/your/activity.fit')\n\n# Extract raw power data\npower_df = fit_loader.extract_power_data()\nprint(power_df.head())\n\n# Compute MMP curve\ndurations, mmp_powers = fit_loader.compute_mmp_curve()\n\n# Create MMP object directly from FIT file\nmmp = mmp_from_fit('path/to/your/activity.fit')\n\n# Create PDC object directly from FIT file\npdc = pdc_from_fit('path/to/your/activity.fit')\n\n# Fit the power duration curve\nresult = pdc.fit()\nprint(result.best_values)",
+    "crumbs": [
+      "FIT File Support"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "PDC-Utils",
+    "section": "",
+    "text": "Fitting algorithm for running or cycling power data with support for Garmin FIT files",
+    "crumbs": [
+      "PDC-Utils"
+    ]
+  },
+  {
+    "objectID": "index.html#install",
+    "href": "index.html#install",
+    "title": "PDC-Utils",
+    "section": "Install",
+    "text": "Install\npip install PDC_Utils",
+    "crumbs": [
+      "PDC-Utils"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "PDC-Utils",
+    "section": "How to use",
+    "text": "How to use\nUses a MMP curve based on best power efforts. You can load data from CSV files or directly from Garmin FIT files.\n\nUsing CSV data\nAn example of CSV input is in the data directory:\n\ndf = pd.read_csv(\"../data/mmpcurve.csv\")\npdc = PDC(df['Secs'], df['Watts'])\n\n\nresult = pdc.fit()\nresult.best_values['ftp']\n\n247.97104270072407\n\n\n\n\nUsing FIT files\nYou can also load data directly from Garmin FIT files:\n\n# Load a FIT file and create a PDC object\npdc_from_fit_file = pdc_from_fit('path/to/your/activity.fit')\n\n# Or create an MMP object\nmmp_from_fit_file = mmp_from_fit('path/to/your/activity.fit')\n\n# You can also work with the raw FIT data\nfit_loader = load_fit_file('path/to/your/activity.fit')\npower_data = fit_loader.extract_power_data()\ndurations, mmp_powers = fit_loader.compute_mmp_curve()",
+    "crumbs": [
+      "PDC-Utils"
+    ]
+  }
+]
